@@ -326,7 +326,7 @@ function updateWarehouseDisplay() {
                 </div>
                 <div class="warehouse-item-actions">
                     ${items.map(item => `
-                        <button class="remove-btn" onclick="removeFromWarehouse('${item.id}')">出庫</button>
+                        <button class="remove-btn" data-item-id="${item.id}">出庫</button>
                     `).join('')}
                 </div>
             </div>
@@ -335,10 +335,19 @@ function updateWarehouseDisplay() {
     
     html += '</div>';
     elements.warehouseContent.innerHTML = html;
+    
+    // イベントリスナーを再設定
+    const removeButtons = elements.warehouseContent.querySelectorAll('.remove-btn');
+    removeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            removeFromWarehouse(itemId);
+        });
+    });
 }
 
-// 倉庫から出す
-function removeFromWarehouse(id) {
+// 倉庫から出す（グローバル関数として定義）
+window.removeFromWarehouse = function(id) {
     const item = gameState.warehouse.find(w => w.id === id);
     if (item) {
         gameState.warehouse = gameState.warehouse.filter(w => w.id !== id);

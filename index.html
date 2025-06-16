@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>インターン向け発注ゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div class="container">
+            <!-- ヘッダー -->
+            <div class="header">
+                <h1>📦 インターン向け発注ゲーム</h1>
+                <p>物流と在庫管理を学ぼう！（費用計算版）</p>
+            </div>
+
+            <!-- ゲーム状況 -->
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-content">
+                        <div>
+                            <p class="status-label">現在の月</p>
+                            <p class="status-value current-month">1月</p>
+                        </div>
+                        <div class="status-icon">📅</div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-content">
+                        <div>
+                            <p class="status-label">累積費用</p>
+                            <p class="status-value total-cost">¥0</p>
+                            <p class="status-sub">開始時: ¥0</p>
+                        </div>
+                        <div class="status-icon">📈</div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <div class="status-content">
+                        <div>
+                            <p class="status-label">倉庫在庫数</p>
+                            <p class="status-value warehouse-count">0個</p>
+                            <p class="status-sub warehouse-cost">月額: ¥0</p>
+                        </div>
+                        <div class="status-icon">📦</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <!-- 発注フォーム -->
+                <div class="card">
+                    <h2>📋 発注フォーム</h2>
+                    
+                    <div id="order-form">
+                        <div class="emergency-notice" id="emergency-notice" style="display: none;">
+                            <p><strong>⚠️ 緊急発注期間</strong></p>
+                            <p>価格2倍・翌月配送のみ</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>資材選択</label>
+                            <select id="material-select">
+                                <option value="0">直線線路 (¥100)</option>
+                                <option value="1">曲線線路 (¥200)</option>
+                                <option value="2">橋 (¥300)</option>
+                                <option value="3">踏切 (¥400)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>数量</label>
+                            <input type="number" id="quantity-input" min="1" max="100" value="1">
+                        </div>
+
+                        <div class="form-group" id="delivery-month-group">
+                            <label>配送月指定 (6月～10月)</label>
+                            <select id="delivery-month-select">
+                                <option value="6">6月</option>
+                                <option value="7">7月</option>
+                                <option value="8">8月</option>
+                                <option value="9">9月</option>
+                                <option value="10">10月</option>
+                            </select>
+                        </div>
+
+                        <div class="delivery-info" id="delivery-info" style="display: none;">
+                            <p><strong>配送予定:</strong> <span id="delivery-info-text"></span></p>
+                        </div>
+
+                        <div class="cost-preview">
+                            <p><strong>発注費用:</strong> <span id="order-cost">¥100</span></p>
+                            <p class="total-preview"><strong>累積費用予定:</strong> <span id="total-cost-preview">¥100</span></p>
+                        </div>
+
+                        <button id="place-order-btn">発注する</button>
+                    </div>
+
+                    <div id="game-ended" style="display: none;">
+                        <div class="game-ended">
+                            <div class="game-ended-icon">⚠️</div>
+                            <p>ゲーム終了</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 倉庫管理 -->
+                <div class="card">
+                    <h2>🏬 倉庫管理</h2>
+                    <div id="warehouse-content">
+                        <div class="empty-warehouse">
+                            <div class="empty-icon">📦</div>
+                            <p>倉庫は空です</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 配送予定 -->
+            <div class="card" id="deliveries-card" style="display: none;">
+                <h2>🚚 配送予定</h2>
+                <div id="deliveries-content" class="deliveries-grid"></div>
+            </div>
+
+            <!-- 費用詳細 -->
+            <div class="card">
+                <h2>💰 費用詳細</h2>
+                <div class="cost-details-grid">
+                    <div class="cost-detail-card order-cost-card">
+                        <h3>発注費用</h3>
+                        <p class="cost-value" id="order-total-cost">¥0</p>
+                        <p class="cost-sub">発注回数: <span id="order-count">0</span>回</p>
+                    </div>
+                    <div class="cost-detail-card warehouse-cost-card">
+                        <h3>倉庫費用</h3>
+                        <p class="cost-value" id="warehouse-total-cost">¥0</p>
+                        <p class="cost-sub">現在の月額: <span id="current-warehouse-cost">¥0</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ゲーム操作 -->
+            <div class="card">
+                <div class="game-controls">
+                    <div class="progress-section">
+                        <p class="progress-text">進行状況: <span id="progress-text">1/10ヶ月</span></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-buttons">
+                        <button id="go-back-btn" class="back-btn" disabled>← 一か月前に戻る</button>
+                        <button id="next-month-btn" class="next-btn">次の月へ →</button>
+                        <div id="game-end-message" style="display: none;">
+                            <p class="game-end-title">ゲーム終了！</p>
+                            <p class="game-end-cost">最終累積費用: <span id="final-cost">¥0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ゲームログ -->
+            <div class="card" id="game-log-card" style="display: none;">
+                <h2>📋 ゲームログ</h2>
+                <div id="game-log-content" class="game-log"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

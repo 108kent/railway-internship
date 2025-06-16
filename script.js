@@ -1,3 +1,7 @@
+// デバッグ用：スクリプトが読み込まれているかチェック
+console.log('Script loaded successfully!');
+console.log('Current URL:', window.location.href);
+
 // ゲーム状態
 let gameState = {
     currentMonth: 1,
@@ -8,6 +12,8 @@ let gameState = {
     gameLog: [],
     gameHistory: []
 };
+
+console.log('Game state initialized:', gameState);
 
 // 定数
 const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月'];
@@ -55,9 +61,17 @@ const elements = {
 
 // 初期化
 function init() {
+    console.log('Init function called');
+    console.log('Elements check:', {
+        currentMonth: !!elements.currentMonth,
+        totalCost: !!elements.totalCost,
+        materialSelect: !!elements.materialSelect
+    });
+    
     updateDisplay();
     updateOrderForm();
     setupEventListeners();
+    console.log('Init completed');
 }
 
 // イベントリスナーの設定
@@ -314,38 +328,80 @@ function updateWarehouseDisplay() {
         return acc;
     }, {});
     
-    let html = '<div class="warehouse-items">';
+    // 倉庫内容をクリア
+    elements.warehouseContent.innerHTML = '';
+    
+    // warehouse-items コンテナを作成
+    const warehouseItemsDiv = document.createElement('div');
+    warehouseItemsDiv.className = 'warehouse-items';
     
     Object.entries(groupedWarehouse).forEach(([materialIndex, items]) => {
         const material = materials[materialIndex];
-        html += `
-            <div class="warehouse-item">
-                <div class="warehouse-item-header">
-                    <h3 class="warehouse-item-title">${material.icon} ${material.name}</h3>
-                    <span class="warehouse-item-count">${items.length}個</span>
-                </div>
-                <div class="warehouse-item-actions">
-                    ${items.map(item => `
-                        <button class="remove-btn" onclick="removeFromWarehouse('${item.id}')">出庫</button>
-                    `).join('')}
-                </div>
-            </div>
+        
+        // warehouse-item div を作成
+        const warehouseItemDiv = document.createElement('div');
+        warehouseItemDiv.className = 'warehouse-item';
+        
+        // ヘッダー部分
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'warehouse-item-header';
+        headerDiv.innerHTML = `
+            <h3 class="warehouse-item-title">${material.icon} ${material.name}</h3>
+            <span class="warehouse-item-count">${items.length}個</span>
         `;
+        
+        // アクション部分
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'warehouse-item-actions';
+        
+        // 各アイテムのボタンを作成
+        items.forEach(item => {
+            const button = document.createElement('button');
+            button.className = 'remove-btn';
+            button.textContent = '出庫';
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('出庫ボタンがクリックされました. Item ID:', item.id);
+                removeFromWarehouse(item.id);
+            });
+            actionsDiv.appendChild(button);
+        });
+        
+        warehouseItemDiv.appendChild(headerDiv);
+        warehouseItemDiv.appendChild(actionsDiv);
+        warehouseItemsDiv.appendChild(warehouseItemDiv);
     });
     
-    html += '</div>';
-    elements.warehouseContent.innerHTML = html;
+    elements.warehouseContent.appendChild(warehouseItemsDiv);
+    console.log('倉庫表示が更新されました');
 }
 
-// 倉庫から出す（グローバル関数として定義）
-window.removeFromWarehouse = function(id) {
-    const item = gameState.warehouse.find(w => w.id === id);
+// 倉庫から出す（デバッグ情報付き）
+function removeFromWarehouse(id) {
+    console.log('removeFromWarehouse関数が呼ばれました. ID:', id);
+    console.log('現在の倉庫状況:', gameState.warehouse);
+    
+    const item = gameState.warehouse.find(w => w.id == id);
+    console.log('見つかったアイテム:', item);
+    
     if (item) {
-        gameState.warehouse = gameState.warehouse.filter(w => w.id !== id);
+        const beforeCount = gameState.warehouse.length;
+        gameState.warehouse = gameState.warehouse.filter(w => w.id != id);
+        const afterCount = gameState.warehouse.length;
+        
+        console.log('削除前の個数:', beforeCount, '削除後の個数:', afterCount);
+        
         addGameLog('remove', `${materials[item.material].name}を倉庫から出しました`);
         updateDisplay();
+        console.log('アイテムが正常に削除されました');
+    } else {
+        console.log('エラー: アイテムが見つかりませんでした');
     }
 }
+
+// グローバルスコープに関数を配置
+window.removeFromWarehouse = removeFromWarehouse;
 
 // 配送予定表示更新
 function updateDeliveriesDisplay() {
@@ -401,4 +457,16 @@ function addGameLog(type, message) {
 }
 
 // ページ読み込み時に初期化
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing game...');
+    init();
+});
+
+// 代替初期化（DOMContentLoadedが動作しない場合用）
+window.addEventListener('load', function() {
+    console.log('Window loaded, checking if game is initialized...');
+    if (!document.querySelector('.current-month').textContent.includes('月')) {
+        console.log('Game not initialized, running init...');
+        init();
+    }
+});

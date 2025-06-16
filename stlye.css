@@ -1,0 +1,535 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f9fafb;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    min-height: 100vh;
+}
+
+/* ヘッダー */
+.header {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #1e40af;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #6b7280;
+}
+
+/* ステータスグリッド */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.status-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.status-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.status-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.status-value.current-month {
+    color: #2563eb;
+}
+
+.status-value.total-cost {
+    color: #dc2626;
+}
+
+.status-value.warehouse-count {
+    color: #ea580c;
+}
+
+.status-sub {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.status-sub.warehouse-cost {
+    color: #dc2626;
+}
+
+.status-icon {
+    font-size: 2rem;
+    opacity: 0.6;
+}
+
+/* メイングリッド */
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+/* カード */
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #374151;
+    margin-bottom: 16px;
+}
+
+/* 発注フォーム */
+.emergency-notice {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.emergency-notice p:first-child {
+    color: #b91c1c;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.emergency-notice p:last-child {
+    color: #dc2626;
+    font-size: 0.75rem;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.delivery-info {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.delivery-info p {
+    color: #1d4ed8;
+    font-size: 0.875rem;
+}
+
+.cost-preview {
+    background: #f3f4f6;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.cost-preview p {
+    font-size: 0.875rem;
+    margin-bottom: 4px;
+}
+
+.total-preview {
+    color: #dc2626;
+}
+
+#place-order-btn {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#place-order-btn:hover {
+    background: #1d4ed8;
+}
+
+#place-order-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.game-ended {
+    text-align: center;
+    padding: 32px;
+    color: #6b7280;
+}
+
+.game-ended-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+}
+
+/* 倉庫管理 */
+.empty-warehouse {
+    text-align: center;
+    padding: 32px;
+    color: #6b7280;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+}
+
+.warehouse-items {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.warehouse-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.warehouse-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.warehouse-item-title {
+    font-weight: 500;
+}
+
+.warehouse-item-count {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.warehouse-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.remove-btn {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.remove-btn:hover {
+    background: #fecaca;
+}
+
+/* 配送予定 */
+.deliveries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.delivery-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.delivery-item p:first-child {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.delivery-item p:last-child {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* 費用詳細 */
+.cost-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.cost-detail-card {
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.order-cost-card {
+    background: #eff6ff;
+}
+
+.warehouse-cost-card {
+    background: #fff7ed;
+}
+
+.cost-detail-card h3 {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.order-cost-card h3 {
+    color: #1e40af;
+}
+
+.warehouse-cost-card h3 {
+    color: #c2410c;
+}
+
+.cost-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.order-cost-card .cost-value {
+    color: #2563eb;
+}
+
+.warehouse-cost-card .cost-value {
+    color: #ea580c;
+}
+
+.cost-sub {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ゲーム操作 */
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.progress-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.progress-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.progress-bar {
+    width: 100%;
+    max-width: 256px;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    height: 8px;
+}
+
+.progress-fill {
+    background: #2563eb;
+    height: 8px;
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+    width: 10%;
+}
+
+.controls-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.back-btn {
+    background: #d97706;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.back-btn:hover:not(:disabled) {
+    background: #b45309;
+}
+
+.back-btn:disabled {
+    background: #d1d5db;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.next-btn {
+    background: #059669;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.next-btn:hover {
+    background: #047857;
+}
+
+.game-end-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.game-end-cost {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ゲームログ */
+.game-log {
+    max-height: 192px;
+    overflow-y: auto;
+}
+
+.log-entry {
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+.log-entry.order {
+    background: #eff6ff;
+    color: #1e40af;
+}
+
+.log-entry.delivery {
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.log-entry.cost {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.log-entry.undo {
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.log-entry.remove {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.log-month {
+    font-weight: 500;
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .controls-buttons {
+        justify-content: center;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .back-btn,
+    .next-btn {
+        width: 100%;
+    }
+}
